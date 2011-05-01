@@ -16,7 +16,7 @@ class Plugin_Navigation extends Plugin
 	 *
 	 * Usage:
 	 * {pyro:navigation:links group="header"}
-	 * Optional:  indent="", tag="li", list_tag="ul", separator="", group_segment="", class=""
+	 * Optional:  indent="", tag="li", list_tag="ul", top="text", separator="", group_segment="", class=""
 	 * @param	array
 	 * @return	array
 	 */
@@ -28,7 +28,7 @@ class Plugin_Navigation extends Plugin
 		is_numeric($group_segment) ? $group = $this->uri->segment($group_segment) : NULL;
 
 		$this->load->model('navigation/navigation_m');
-		$links = $this->pyrocache->model('navigation_m', 'load_group', array($group), $this->settings->navigation_cache);
+		$links = $this->pyrocache->model('navigation_m', 'get_link_tree', array($group), $this->settings->navigation_cache);
 
 		return $this->_build_links($links, $this->content());
 	}
@@ -38,9 +38,11 @@ class Plugin_Navigation extends Plugin
 		static $is_current	= FALSE;
 		static $level		= 0;
 
-		$separator	= $this->attribute('separator', '');
-		$link_class	= $this->attribute('class', '');
-		$output		= $return_arr ? array() : '';
+		$top			= $this->attribute('top', FALSE);
+		$separator		= $this->attribute('separator', '');
+		$link_class		= $this->attribute('link_class', '');
+		$current_class	= $this->attribute('class', 'current');
+		$output			= $return_arr ? array() : '';
 
 		$i		= 1;
 		$total	= sizeof($links);
@@ -55,6 +57,7 @@ class Plugin_Navigation extends Plugin
 				case 't':
 				case 'tab':
 				case '	':
+					$indent = "\t";
 					break;
 				case 's':
 				case 'space':
@@ -80,13 +83,13 @@ class Plugin_Navigation extends Plugin
 			$wrapper	= array();
 
 			// attributes of anchor
-			$item['url']					= $link->url;
-			$item['title']					= $link->title;
-			$item['attributes']['target']	= $link->target ? 'target="' . $link->target . '"' : NULL;
+			$item['url']					= $link['url'];
+			$item['title']					= $link['title'];
+			$item['attributes']['target']	= $link['target'] ? 'target="' . $link['target'] . '"' : NULL;
 			$item['attributes']['class']	= $link_class ? 'class="' . $link_class . '"' : '';
 
 			// attributes of anchor wrapper
-			$wrapper['class']		= $link->class ? explode(' ', $link->class) : array();
+			$wrapper['class']		= $link['class'] ? explode(' ', $link['class']) : array();
 			$wrapper['children']	= $return_arr ? array() : NULL;
 			$wrapper['separator']	= $separator;
 
@@ -110,18 +113,18 @@ class Plugin_Navigation extends Plugin
 			}
 
 			// has children ? build children
-			if ($link->has_kids)
+			if ($link['children'])
 			{
 				++$level;
-				$wrapper['children'] = $this->_build_links($link->children, $return_arr);
+				$wrapper['children'] = $this->_build_links($link['children'], $return_arr);
 				--$level;
 			}
 
 			// is current ?
-			if (current_url() === $link->url)
+			if (current_url() === $link['url'] OR ($link['link_type'] === 'page' && $link['is_home'] == TRUE) AND site_url() === current_url())
 			{
 				$is_current = TRUE;
-				$wrapper['class'][] = 'current';
+				$wrapper['class'][] = $current_class;
 			}
 
 			// current experimental
@@ -135,9 +138,9 @@ class Plugin_Navigation extends Plugin
 			// has children as current ?
 			if ($is_current)
 			{
-				if ( ! in_array('current', $wrapper['class']))
+				if ( ! in_array($current_class, $wrapper['class']))
 				{
-					$wrapper['class'][] = 'has_current';
+					$wrapper['class'][] = 'has_' . $current_class;
 				}
 
 				if ($level === 0)
@@ -169,15 +172,22 @@ class Plugin_Navigation extends Plugin
 			}
 			else
 			{
-				$add_first_tag = $level > 0 OR ! in_array($this->attribute('itens_only', 'true'), array('1','y','yes','true'));
+				$add_first_tag = $level === 0 && ! in_array($this->attribute('items_only', 'true'), array('1','y','yes','true'));
 
 				// render and indent or only render inline?
 				if ($indent)
 				{
 					$output .= $add_first_tag ? "<{$list_tag}>" . PHP_EOL : '';
 					$output .= $ident_b . '<' . $tag . ' class="' . implode(' ', $wrapper['class']) . '">' . PHP_EOL;
-					$output .= $ident_c . anchor($item['url'], $item['title'], trim(implode(' ', $item['attributes']))) . PHP_EOL;
-					$output .= $wrapper['children'] ? $ident_c . str_replace(PHP_EOL, (PHP_EOL . $indent),  trim($wrapper['children'])) . PHP_EOL : '';
+					$output .= $ident_c . (($level == 0) AND $top == 'text') ? $item['title'] : anchor($item['url'], $item['title'], trim(implode(' ', $item['attributes']))) . PHP_EOL;
+
+					if ($wrapper['children'])
+					{
+						$output .= $ident_c . "<{$list_tag}>" . PHP_EOL;
+						$output .= $ident_c . $indent . str_replace(PHP_EOL, (PHP_EOL . $indent),  trim($ident_c . $wrapper['children'])) . PHP_EOL;
+						$output .= $ident_c . "</{$list_tag}>" . PHP_EOL;
+					}
+
 					$output .= $wrapper['separator'] ? $ident_c . $wrapper['separator'] . PHP_EOL : '';
 					$output .= $ident_b . "</{$tag}>" . PHP_EOL;
 					$output .= $add_first_tag ? $ident_a . "</{$list_tag}>" . PHP_EOL : '';
@@ -186,8 +196,16 @@ class Plugin_Navigation extends Plugin
 				{
 					$output .= $add_first_tag ? "<{$list_tag}>" : '';
 					$output .= '<' . $tag . ' class="' . implode(' ', $wrapper['class']) . '">';
-					$output .= anchor($item['url'], $item['title'], trim(implode(' ', $item['attributes'])));
-					$output .= $wrapper['children'] .  $wrapper['separator'];
+					$output .= (($level == 0) AND $top == 'text') ? $item['title'] : anchor($item['url'], $item['title'], trim(implode(' ', $item['attributes'])));
+
+					if ($wrapper['children'])
+					{
+						$output .= "<{$list_tag}>";
+						$output .= $wrapper['children'];
+						$output .= "</{$list_tag}>";
+					}
+
+					$output .= $wrapper['separator'];
 					$output .= "</{$tag}>";
 					$output .= $add_first_tag ? "</{$list_tag}>" : '';
 				}
