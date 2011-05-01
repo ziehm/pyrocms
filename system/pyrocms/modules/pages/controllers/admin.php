@@ -380,6 +380,22 @@ class Admin extends Admin_Controller {
 			redirect('admin/pages/create');
 	    }
 
+		$this->load->model(array(
+			'files/file_m',
+			'files/file_folders_m',
+			'files/files_attached_m'
+		));
+		$this->lang->load('files/files');
+		$this->lang->load('files/files_attached');
+
+		$folders = $this->file_folders_m->get_folders();
+
+		$this->data->folders_tree = array();
+		foreach ($folders as $folder)
+		{
+			$this->data->folders_tree[$folder->id] = repeater('&raquo; ', $folder->depth) . $folder->name;
+		}
+
 	    // Set the page ID and get the current page
 	    $this->page_id = $page->id;
 

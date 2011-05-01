@@ -224,7 +224,7 @@ class Admin_attachments extends Admin_Controller {
 				$arr = array();
 				foreach ($data as $field => $value)
 				{
-					$arr[substr($field, 13)] = $value;
+					$arr[$field] = $value;
 				}
 				return (object) $arr;
 		}
@@ -248,7 +248,7 @@ class Admin_attachments extends Admin_Controller {
 				$arr = array();
 				foreach ($data as $field => $value)
 				{
-					$arr[substr($field, 12)] = $value;
+					$arr[$field] = $value;
 				}
 				return (object) $arr;
 		}

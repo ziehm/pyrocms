@@ -26,6 +26,7 @@ $lang['files_attached.link_url_label']						= 'URL';
 $lang['files_attached.link_title_label']					= 'Title';
 $lang['files_attached.link_class_label']					= 'Classe';
 $lang['files_attached.attach_link_label']					= 'Anexar link';
+$lang['files_attached.attach_file_browser_label']			= 'Anexar arquivo';
 $lang['files_attached.attachments_key_label']				= 'Chave interna para identificação de anexos';
 $lang['files_attached.pick_folder_label']					= 'Selecione a pasta';
 $lang['files_attached.pick_file_label']						= 'Selecione o arquivo';
@@ -33,7 +34,8 @@ $lang['files_attached.pick_file_label']						= 'Selecione o arquivo';
 // Descriptions
 $lang['files_attached.attachment_type_desc']				= 'Por favor, selecione a origem do anexo para exibir mais opções.';
 $lang['files_attached.no_attachments_desc']					= 'Sem anexos atualmente.';
-$lang['files_attached.attach_link_desc']					= 'Clique aqui para anexar este link';
+$lang['files_attached.attach_link_desc']					= 'Clique aqui para anexar o link';
+$lang['files_attached.attach_file_browser_desc']			= 'Clique aqui para anexar o arquivo selecionado';
 
 // Messages
 $lang['files_attached.create_success']						= 'O anexo "%s" foi criado com sucesso!';

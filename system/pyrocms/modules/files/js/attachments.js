@@ -37,8 +37,20 @@
 
 			init: function(){
 
-				pyro.attachments.tmpl.attachment_item = $('<div />').html(pyro.attachments.$list.children('.tmpl').hide().removeClass('tmpl')).html();
-				pyro.attachments.tmpl.file_browser_item = $('<div />').html(pyro.attachments.file_browser.$container.find('select option.tmpl').removeClass('tmpl')).html();
+				pyro.attachments.tmpl.attachment_item = $('<div />')
+					.html(
+						pyro.attachments.$list
+							.children('.tmpl')
+							.hide()
+							.removeClass('tmpl')
+					).html();
+
+				pyro.attachments.tmpl.file_browser_item = $('<div />')
+					.html(
+						pyro.attachments.file_browser.$container
+							.find('select option.tmpl')
+							.removeClass('tmpl')
+					).html();
 
 				// TYPE FILE BROWSER ---------------------------------------------------------------
 
@@ -57,6 +69,8 @@
 
 					if ( ! id)
 					{
+						pyro.attachments.file_browser.file.$preview.removeClass('unlock').addClass('lock');
+
 						return;
 					}
 
@@ -91,6 +105,12 @@
 								$.uniform.update(pyro.attachments.file_browser.$contents
 									.append($(opts))
 									.removeAttr('disabled'));
+
+								pyro.attachments.file_browser.file.$preview.removeClass('lock').addClass('unlock');
+							}
+							else
+							{
+								pyro.attachments.file_browser.file.$preview.removeClass('unlock').addClass('lock');
 							}
 						}
 
@@ -102,9 +122,6 @@
 						pyro.attachments.file_browser.file.$preview.removeClass('loading');
 					}, 'json');
 				})).change();
-
-				// >>> add event to contents select (paste from personal files) >>> make better
-				// >>> add attach post
 
 				// Toggle file preview
 				pyro.attachments.file_browser.$contents.bind('change keyup', $.debounce(350, function(e){
@@ -134,18 +151,53 @@
 							pyro.attachments.file_browser.file.$preview
 								.removeClass('loading')
 								.html(pyro.attachments.file_browser.file.$image)
-								.wrapInner('<a href="' + file.source + '" rel="modal" />')
-								.fadeIn('slow');
+								.wrapInner(
+									'<a href="' + file.source +
+									'" style="background-image: url(' + file.thumb + ');" />'
+								).filter(function(){
+									$('a', this).colorbox({
+										scrolling: false,
+										maxWidth: '80%',
+										maxHeight: '80%'
+									}).data('colorbox');
+									return true;
+								}).fadeIn('slow');
 
 						}).attr('src', file.thumb);
 					});
 				})).change();
 
+				$('#attachment-file-browser .button.attach').click(function(e){
+					e.preventDefault();
+
+					var button	= $(this),
+						url		= button.attr('href'),
+						data	= {
+							attachments_key	: attachments_key,
+							file_id : $('select[name=attachment_file_contents]').val()
+						}
+
+					$.post(url, data, function(data){
+						if (data && data.status == 'success')
+						{
+							pyro.add_notification(data.message)
+								.attachments.add_attachment(data.attachment);
+						}
+						else if (data && data.status == 'error')
+						{
+							pyro.add_notification(data.message);
+						}
+					}, 'json');
+				});
+
 				// TYPE LINK -----------------------------------------------------------------------
 
 				var attachments_key = $('input[name=attachments_key]').val();
 
-				$('input[value="http://"]').data('default_value', 'http://').bind('keyup blur', $.debounce(350, function(e){
+				$('input[value="http://"]')
+					.data('default_value', 'http://')
+					.bind('keyup blur', $.debounce(350, function(e){
+
 					var self = $(this);
 
 					if (e.type == 'blur' && ! self.val().length)

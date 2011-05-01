@@ -92,6 +92,9 @@
 						<li class="even">
 							<label for="file_browser"><?php echo lang('files_attached.pick_folder_label'); ?></label>
 							<?php echo form_dropdown('attachment_file_folders', ($folders_tree ? (array('' => lang('select.pick')) + $folders_tree) : array('' => lang('select.none'))), '', 'id="file-browser-folders"'); ?>
+							<div class="spacer-left button-icons inline">
+								<?php echo anchor('admin/files/attachments/attach/file_browser', lang('files_attached.attach_file_browser_label'), 'title="' . lang('files_attached.attach_file_browser_desc') . '" class="button attach"'); ?>
+							</div>
 						</li>
 						<li class="" id="file-browser-files">
 							<label for="file_browser"><?php echo lang('files_attached.pick_file_label'); ?></label>
