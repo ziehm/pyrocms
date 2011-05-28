@@ -49,8 +49,8 @@ $lang['pages.edit_title'] 					= 'Editar página "%s"';
 $lang['pages.list_title'] 					= 'Listar páginas';
 $lang['pages.layouts_create_title'] 		= 'Adicionar página de layout';
 $lang['pages.layouts_list_title'] 			= 'Listar páginas de layout';
-$lang['pages.compare_revisions_title']		= 'Comprar revisões';
-$lang['pages.preview_revision_title']		= 'Visualizar revisões';
+$lang['pages.compare_revisions_title']		= 'Comparar revisões';
+$lang['pages.preview_revision_title']		= 'Visualizar revisão';
 
 // messages
 $lang['pages.no_pages'] 					= 'Nenhuma página encontrada.';
@@ -66,8 +66,7 @@ $lang['pages_page_already_exist_error'] 	= 'Uma página com a URL "%s" já exist
 $lang['pages_parent_not_exist_error'] 		= 'A página pai que você selecionou não existe.';
 $lang['pages.attachments_key_already_exist_error'] = 'Outra página já está utilizando a chave "%s", as chaves internas para obter anexos devem ser únicas para cada página.';
 
-$lang['pages.tree_explanation'] 			= 'A lista da esquerda representa as páginas em seu website. 
-Clique no ícone "+" próximo da página para exibir as páginas associadas. Quando você clicar na página você visualizará várias informações úteis nesta caixa.';
+$lang['pages.tree_explanation'] 			= 'A lista a esquerda representa as páginas do seu site em cada item. Quando houver um indicador de mais ao lado de um item, clique sobre o indicador para exibir suas subpáginas.<br><br>Você também pode arrastar as páginas para ordená-las e/ou posiciona-las distanciando para direita horizontalmente abaixo de outra página para transforma-las em subpáginas.<br><br>Se você clicar sobre o texto do título deverá ver todo tipo de informação útil nesta caixa.';
 
 $lang['pages.rss_explanation']				= 'Ativando o Feed RSS para esta página dará acesso aos usuários a chance de se inscreverem a este Feed e receberem uma atualização imediata quando uma nova página filho for adicionada.';
 

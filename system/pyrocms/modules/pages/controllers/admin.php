@@ -316,16 +316,16 @@ class Admin extends Admin_Controller {
 				continue;
 			}
 
-			if ($rule['field'] === 'restricted_to[]')
+			if ($rule['field'] === 'attachments_key')
 			{
-				$page->restricted_to = set_value($rule['field']);
+				$page->{$rule['field']} = set_value($rule['field'], $this->files_attached_m->generate_key());
 
 				continue;
 			}
 
-			if ($rule['field'] === 'attachments_key')
+			if ($rule['field'] === 'restricted_to[]')
 			{
-				$page->{$rule['field']} = set_value($rule['field'], $this->files_attached_m->generate_key());
+				$page->restricted_to = set_value($rule['field']);
 
 				continue;
 			}
@@ -380,6 +380,9 @@ class Admin extends Admin_Controller {
 			redirect('admin/pages/create');
 	    }
 
+	    // Set the page ID and get the current page
+	    $this->page_id = $page->id;
+
 		$this->load->model(array(
 			'files/file_m',
 			'files/file_folders_m',
@@ -395,9 +398,6 @@ class Admin extends Admin_Controller {
 		{
 			$this->data->folders_tree[$folder->id] = repeater('&raquo; ', $folder->depth) . $folder->name;
 		}
-
-	    // Set the page ID and get the current page
-	    $this->page_id = $page->id;
 
 		$this->load->model('files/files_attached_m');
 		$this->lang->load('files/files_attached');
@@ -463,6 +463,13 @@ class Admin extends Admin_Controller {
 			if ($rule['field'] === 'attachments[]')
 			{
 				$page->attachments = $this->attachments;
+
+				continue;
+			}
+
+			if ($rule['field'] === 'attachments_key' && ! $page->attachments_key)
+			{
+				$page->{$rule['field']} = set_value($rule['field'], $this->files_attached_m->generate_key());
 
 				continue;
 			}
@@ -591,12 +598,14 @@ class Admin extends Admin_Controller {
 		// Create the diff using mixed mode
 		$rev_1 = $this->versioning->get_by_revision($id_1);
 		$rev_2 = $this->versioning->get_by_revision($id_2);
-		$diff  = $this->versioning->compare_revisions($rev_1->body, $rev_2->body, 'mixed');
+		$diff  = $this->versioning->compare_revisions($rev_2->body, $rev_1->body, 'mixed');
 
 		// Output the results
 		$data['difference'] = $diff;
-		$this->template->set_layout('modal', 'admin')
-				->build('admin/revisions/compare', $data);
+
+		$this->template
+			->set_layout('modal', 'admin')
+			->build('admin/revisions/compare', $data);
 	}
 
 	/**

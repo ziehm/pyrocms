@@ -17,7 +17,7 @@
 		<li><a href="#page-design"><span><?php echo lang('pages.design_label');?></span></a></li>
 		<li><a href="#page-script"><span><?php echo lang('pages.script_label');?></span></a></li>
 		<li><a href="#page-options"><span><?php echo lang('pages.options_label');?></span></a></li>
-		<li><a href="#revision-options"><span><?php echo lang('pages.revisions_label');?></span></a></li>
+		<?php if ($this->method !== 'create'): ?><li><a href="#revision-options"><span><?php echo lang('pages.revisions_label');?></span></a></li><?php endif; ?>
 	</ul>
 
 	<?php alternator(); ?>
@@ -63,7 +63,7 @@
 			</li>
 			<?php endif; ?>
 			<li class="<?php echo alternator('even', ''); ?>">
-				<?php echo form_textarea(array('id'=>'body', 'name'=>'body', 'value' => stripslashes($page->body), 'rows' => 50, 'class'=>'wysiwyg-advanced')); ?>
+				<?php echo form_textarea(array('id'=>'body', 'name'=>'body', 'value' => $page->body, 'rows' => 50, 'class'=>'wysiwyg-advanced')); ?>
 			</li>
 		</ul>
 	</div>
@@ -109,7 +109,6 @@
 							<div class="file_preview inline"></div>
 						</li>
 					</ul>
-					<?php /* TODO: Folders dropdown -> list folder contents -> filter/select file */ ?>
 				</div>
 				<div id="attachment-file-upload" class="hidden">
 					<label for="file_upload"><?php echo lang('files_attached.do_file_upload_label'); ?></label>
@@ -239,6 +238,7 @@
 		</ul>
 	</div>
 
+	<?php if ($this->method !== 'create'): ?>
 	<?php alternator(); ?>
 	
 	<!-- Revisions -->
@@ -250,16 +250,22 @@
 				<select id="use_revision_id" name="use_revision_id">
 					<!-- Current revision to be used -->
 					<optgroup label="<?php echo lang('pages.current_label'); ?>">
-						<option value="<?php echo @$page->revision_id; ?>"><?php echo format_date(@$page->revision_date, $this->settings->date_format . ' h:ia '); ?></option>
+						<option value="<?php echo $page->revision_id; ?>"><?php echo format_date($page->revision_date, $this->settings->date_format . ' H:i'); ?></option>
 					</optgroup>
 					<!-- All available revisions -->
 					<optgroup label="<?php echo lang('pages.revisions_label'); ?>">
 						<?php foreach ($revisions as $revision): ?>
-						<option value="<?php echo @$revision->id; ?>"><?php echo format_date(@$revision->revision_date, $this->settings->date_format . ' h:ia '); ?></option>
+						<?php if ($revision->id !== $page->revision_id): ?>
+						<option value="<?php echo $revision->id; ?>"><?php echo format_date($revision->revision_date, $this->settings->date_format . ' H:i'); ?></option>
+						<?php endif; ?>
 						<?php endforeach; ?>
 					</optgroup>
 				</select>
-				<input type="button" name="btn_preview_revision" id="btn_preview_revision" value="<?php echo lang('pages.preview_label'); ?>" />
+				<div class="buttons buttons-small inline">
+					<button type="button" name="btn_preview_revision" id="btn_preview_revision">
+						<span><?php echo lang('pages.preview_label'); ?></span>
+					</button>
+				</div>
 			</li>
 			<!-- Compare two revisions -->
 			<li class="<?php echo alternator('even', ''); ?>">
@@ -268,20 +274,27 @@
 				<select id="compare_revision_<?php echo $i; ?>" name="compare_revision_<?php echo $i; ?>">
 					<!-- Current revision to be used -->
 					<optgroup label="<?php echo lang('pages.current_label'); ?>">
-						<option value="<?php echo @$page->revision_id; ?>"><?php echo format_date(@$page->revision_date, $this->settings->date_format . ' h:ia '); ?></option>
+						<option value="<?php echo $page->revision_id; ?>"><?php echo format_date($page->revision_date, $this->settings->date_format . ' H:i'); ?></option>
 					</optgroup>
 					<!-- All available revisions -->
 					<optgroup label="<?php echo lang('pages.revisions_label'); ?>">
 						<?php foreach ($revisions as $revision): ?>
-						<option value="<?php echo @$revision->id; ?>"><?php echo format_date(@$revision->revision_date, $this->settings->date_format . ' h:ia '); ?></option>
+						<?php if ($revision->id !== $page->revision_id): ?>
+						<option value="<?php echo $revision->id; ?>"><?php echo format_date($revision->revision_date, $this->settings->date_format . ' H:i'); ?></option>
+						<?php endif; ?>
 						<?php endforeach; ?>
 					</optgroup>
 				</select>
 				<?php ++$i; endwhile; ?>
-				<input type="button" name="btn_compare_revisions" id="btn_compare_revisions" value="<?php echo lang('pages.compare_label'); ?>" />
+				<div class="buttons buttons-small inline">
+					<button type="button" name="btn_compare_revisions" id="btn_compare_revisions">
+						<span><?php echo lang('pages.compare_label'); ?></span>
+					</button>
+				</div>
 			</li>
 		</ul>
 	</div>
+	<?php endif; ?>
 
 </div>
 
