@@ -242,7 +242,7 @@ class Asset {
 	private function _other_asset_location($asset_name, $module_name = NULL, $asset_type = NULL, $location_type = 'url')
 	{
 		// Given a full URL
-		if (strpos($asset_name, '://') !== FALSE)
+		if (strpos($asset_name, '://') !== FALSE OR strpos($asset_name, '//') === 0)
 		{
 			return $asset_name;
 		}
@@ -268,17 +268,54 @@ class Asset {
 		else
 		{
 			$asset_location = $base_location;
+			
+			// we need to check if they are using the default theme or a Premium theme
+			if (is_dir(APPPATH . 'themes/' . ADMIN_THEME))
+			{
+				$admin_path = APPPATH . 'themes/' . ADMIN_THEME . '/';
+			}
+			elseif (is_dir(SHARED_ADDONPATH . 'themes/' . ADMIN_THEME))
+			{
+				$admin_path = SHARED_ADDONPATH . 'themes/' . ADMIN_THEME . '/';
+			}
+			elseif (is_dir(ADDONPATH . 'themes/' . ADMIN_THEME))
+			{
+				$admin_path = ADDONPATH . 'themes/' . ADMIN_THEME . '/';
+			}
 
 			// Its in a module, ignore the current
 			if ($module_name)
 			{
 				foreach (Modules::$locations as $path => $offset)
 				{
-					if (is_dir($path . $module_name))
+					//to speed things up only check in the admin theme if we're on the admin panel
+					if ($this->theme == ADMIN_THEME)
 					{
-						$base_location	= $location_type == 'url' ? rtrim(site_url(), '/') . '/' : BASE_URI;
-						$asset_location = $base_location . $path . $module_name . '/';
-						break;
+						//check in the admin theme first for overloaded asset files
+						if(is_file($admin_path . $asset_type . '/modules/' . $module_name . '/' . $asset_name))
+						{
+							$asset_location = BASE_URL . $admin_path . $asset_type . '/modules/' . $module_name . '/';
+				
+							//reset $asset_type so we don't have admin_theme/css/module/css folder structure
+							$asset_type = '';
+							
+							break;
+						}
+						// nothing overloaded. The cat is on their back
+						elseif (is_dir($path . $module_name))
+						{
+							$asset_location = BASE_URL . $path . $module_name . '/';
+							break;
+						}
+					}
+					else
+					{
+						if (is_dir($path . $module_name))
+						{
+							$base_location	= $location_type == 'url' ? rtrim(site_url(), '/') . '/' : BASE_URI;
+							$asset_location = $base_location . $path . $module_name . '/';
+							break;
+						}
 					}
 				}
 			}

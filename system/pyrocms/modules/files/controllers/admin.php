@@ -96,7 +96,7 @@ class Admin extends Admin_Controller {
 				'current_id'	=> 0
 			));
 
-		$this->_path = FCPATH . '/' . $this->config->item('files_folder') . '/';
+		$this->_path = FCPATH . $this->config->item('files_folder');
 		$this->_check_dir();
 	}
 
@@ -153,7 +153,7 @@ class Admin extends Admin_Controller {
 				$status		= 'error';
 				$message	= $this->upload->display_errors();
 
-				if ($this->is_ajax())
+				if ($this->input->is_ajax_request())
 				{
 					$data = array();
 					$data['messages'][$status] = $message;
@@ -200,7 +200,7 @@ class Admin extends Admin_Controller {
 					$message	= lang('files.create_error');
 				}
 
-				if ($this->is_ajax())
+				if ($this->input->is_ajax_request())
 				{
 					$data = array();
 					$data['messages'][$status] = $message;
@@ -228,7 +228,7 @@ class Admin extends Admin_Controller {
 		elseif (validation_errors())
 		{
 			// if request is ajax return json data, otherwise do normal stuff
-			if ($this->is_ajax())
+			if ($this->input->is_ajax_request())
 			{
 				$message = $this->load->view('admin/partials/notices', array(), TRUE);
 
@@ -239,7 +239,7 @@ class Admin extends Admin_Controller {
 			}
 		}
 
-		if ($this->is_ajax())
+		if ($this->input->is_ajax_request())
 		{
 			// todo: debug errors here
 			$status		= 'error';
@@ -287,7 +287,7 @@ class Admin extends Admin_Controller {
 			$status		= 'error';
 			$message	= lang('files.file_label_not_found');
 
-			if ($this->is_ajax())
+			if ($this->input->is_ajax_request())
 			{
 				$data = array();
 				$data['messages'][$status] = $message;
@@ -322,7 +322,7 @@ class Admin extends Admin_Controller {
 					$status		= 'error';
 					$message	= $this->upload->display_errors();
 
-					if ($this->is_ajax())
+					if ($this->input->is_ajax_request())
 					{
 						$data = array();
 						$data['messages'][$status] = $message;
@@ -368,7 +368,7 @@ class Admin extends Admin_Controller {
 						$message	= lang('files.edit_error');
 					};
 
-					if ($this->is_ajax())
+					if ($this->input->is_ajax_request())
 					{
 						$data = array();
 						$data['messages'][$status] = $message;
@@ -410,7 +410,7 @@ class Admin extends Admin_Controller {
 					$message	= lang('files.edit_error');
 				};
 
-				if ($this->is_ajax())
+				if ($this->input->is_ajax_request())
 				{
 					$data = array();
 					$data['messages'][$status] = $message;
@@ -433,7 +433,7 @@ class Admin extends Admin_Controller {
 		elseif (validation_errors())
 		{
 			// if request is ajax return json data, otherwise do normal stuff
-			if ($this->is_ajax())
+			if ($this->input->is_ajax_request())
 			{
 				$message = $this->load->view('admin/partials/notices', array(), TRUE);
 
@@ -444,7 +444,7 @@ class Admin extends Admin_Controller {
 			}
 		}
 
-		$this->is_ajax() && $this->template->set_layout(FALSE);
+		$this->input->is_ajax_request() && $this->template->set_layout(FALSE);
 
 		$this->template
 			->title('')
@@ -544,10 +544,16 @@ class Admin extends Admin_Controller {
 		}
 		elseif ( ! is_dir($this->_path))
 		{
-			if ( ! @mkdir($this->_path))
+			if ( ! @mkdir($this->_path, 0777, TRUE))
 			{
 				$this->data->messages['notice'] = lang('file_folders.mkdir_error');
 				return FALSE;
+			}
+			else
+			{
+				// create a catch all html file for safety
+				$uph = fopen($this->_path . 'index.html', 'w');
+				fclose($uph);
 			}
 		}
 		else

@@ -14,9 +14,36 @@ class MY_Controller extends CI_Controller {
 		parent::__construct();
 
 		$this->benchmark->mark('my_controller_start');
+		
+		// TODO: Remove all this migration check in the next major version after 1.3.0
+		// This extra check needs to be done to make the "multisite" changes run before the rest
+		// of the controller attempts to run
+		if ($this->db->table_exists('schema_version'))
+		{
+			$this->load->library('migrations');
+			$this->migrations->latest();
+			redirect(current_url());
+		}
+		// End migration check
 
-		// Migrate DB to the latest version
+		// No record? Probably DNS'ed but not added to multisite
+		// $this->site is set in MY_Loader
+		if ( ! defined('SITE_REF'))
+		{
+			show_error('This domain is not set up correctly.');
+		}
+
+		// By changing the prefix we are essentially "namespacing" each pyro site
+		$this->db->set_dbprefix(SITE_REF.'_');
+		$this->load->library('pyrocache');
+		
+		// Add the site specific theme folder
+		$this->template->add_theme_location(ADDONPATH.'themes/');
+
+		// Migration logic helps to make sure PyroCMS is running the latest changes
+		
 		$this->load->library('migrations');
+		// $this->migrations->verbose = true;
 		$schema_version = $this->migrations->latest();
 		
 		if ($this->migrations->error)
@@ -33,6 +60,9 @@ class MY_Controller extends CI_Controller {
 		{
 			log_message('error', $this->migrations->error);
 		}
+
+		// With that done, load settings
+		$this->load->library(array('settings/settings', 'events', 'users/ion_auth'));
 
 		// Use this to define hooks with a nicer syntax
 		$this->hooks = & $GLOBALS['EXT'];
@@ -57,7 +87,8 @@ class MY_Controller extends CI_Controller {
 		$this->load->model(array(
 			'permissions/permission_m',
 			'modules/module_m',
-			'pages/pages_m'
+			'pages/pages_m',
+			'themes/themes_m'
 		));
 
 		// List available module permissions for this user
@@ -80,13 +111,23 @@ class MY_Controller extends CI_Controller {
 		$pyro['lang']['code'] = CURRENT_LANGUAGE;
 
 		$this->load->vars($pyro);
+		
+		// Load the admin theme so things like partials and assets are available everywhere
+		$this->admin_theme = $this->themes_m->get_admin();
+		// Load the front-end theme so we can set the assets right away
+		$this->theme = $this->themes_m->get();
+
+		// make a constant as this is used in a lot of places		
+		define('ADMIN_THEME', $this->admin_theme->slug);
+		
+		// Asset library needs to know where the admin theme directory is
+		$this->config->set_item('asset_dir', $this->admin_theme->path.'/');
+		$this->config->set_item('asset_url', BASE_URL.$this->admin_theme->web_path.'/');
+		// Set the front-end theme directory
+		$this->config->set_item('theme_asset_dir', dirname($this->theme->path).'/');
+		$this->config->set_item('theme_asset_url', BASE_URL.dirname($this->theme->web_path).'/');
 
 		$this->benchmark->mark('my_controller_end');
-	}
-
-	protected function is_ajax()
-	{
-		return $this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest';
 	}
 }
 
