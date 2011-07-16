@@ -94,10 +94,10 @@ class Admin_attachments extends Admin_Controller {
 				$data['messages']['error'] = lang('files_attached.invalid_type_error');
 				$message = $this->load->view('admin/partials/notices', $data, TRUE);
 
-				return print( json_encode((object) array(
+				return $this->template->build_json(array(
 					'status'	=> 'error',
 					'message'	=> $message
-				)) );
+				));
 			}
 		}
 
@@ -145,10 +145,10 @@ class Admin_attachments extends Admin_Controller {
 				$data['messages'][$status] = $message;
 				$message = $this->load->view('admin/partials/notices', $data, TRUE);
 
-				return print( json_encode((object) (array(
+				return $this->template->build_json(array(
 					'status'	=> $status,
 					'message'	=> $message
-				) + $attachment_arr)) );
+				) + $attachment_arr);
 			}
 		}
 		else if (validation_errors())
@@ -157,10 +157,10 @@ class Admin_attachments extends Admin_Controller {
 			{
 				$message = $this->load->view('admin/partials/notices', array(), TRUE);
 
-				return print( json_encode((object) array(
+				return $this->template->build_json(array(
 					'status'	=> 'error',
 					'message'	=> $message
-				)) );
+				));
 			}
 		}
 	}
@@ -180,10 +180,10 @@ class Admin_attachments extends Admin_Controller {
 	{
 //		if ($this->is_ajax())
 //		{
-//			return print( json_encode((object) array(
+//			return $this->template->build_json(array(
 //				'status'	=> 'error',
 //				'message'	=> 'not found'
-//			)) );
+//			));
 //		}
 		
 		$files = $this->file_m
@@ -202,10 +202,10 @@ class Admin_attachments extends Admin_Controller {
 			);
 		}
 
-		return print( json_encode((object) array(
+		return $this->template->build_json(array(
 			'status'	=> 'success',
 			'files'		=> $files
-		)) );
+		));
 	}
 
 	public function _get_file_browser_field($data = array(), $name = '')
