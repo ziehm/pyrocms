@@ -112,12 +112,12 @@ class Ajax extends CI_Controller {
 			'curl' => $this->installer_lib->curl_enabled(),
 		);
 
-		include '../system/pyrocms/libraries/Curl.php';
+		include '../system/cms/libraries/Curl.php';
 		$url = 'http://pyrocms.com/statistics/add ';
 		$curl = new Curl;
 		$curl->simple_post($url, $data);
 	}
-	
+
 	/**
 	 * Check if apache's mod_rewrite is enabled
 	 *
@@ -127,6 +127,12 @@ class Ajax extends CI_Controller {
 	 */
 	public function check_rewrite()
 	{
+		// if it doesn't exist then warn them at least
+		if ( ! function_exists('apache_get_modules'))
+		{
+			return print(lang('rewrite_fail'));
+		}
+
 		$modules = apache_get_modules();
 
 		if (in_array('mod_rewrite', $modules))
@@ -142,4 +148,3 @@ class Ajax extends CI_Controller {
 }
 
 /* End of file ajax.php */
-/* Location: ./installer/controllers/ajax.php */

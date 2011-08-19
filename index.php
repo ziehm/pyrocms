@@ -128,7 +128,7 @@ else
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = 'system/pyrocms';
+	$application_folder = 'system/cms';
 
 /*
  *---------------------------------------------------------------
@@ -287,4 +287,3 @@ else
 require_once BASEPATH.'core/CodeIgniter'.EXT;
 
 /* End of file index.php */
-/* Location: ./index.php */
