@@ -1223,7 +1223,7 @@ Primary styles. (Mobile first, everything else is overridden with @media queries
 */
 
 #container {
-	width: 1280px;
+	width: 280px;
 	height: 100%;
 	min-height: 100%;
 	margin: 0 auto;
@@ -1255,16 +1255,9 @@ Primary styles. (Mobile first, everything else is overridden with @media queries
 }
 
 ul#lang {
-	float: right;
-}
-
-ul#lang form {
-	margin: 10px 20px 0 0;
-	float: right;
-}
-
-ul#lang form legend, ul#lang form input, ul#lang form select {
-	max-width: 230px;
+	position: absolute;
+	right: 0;
+	top: -10px;
 }
 
 .subbar {
@@ -1418,7 +1411,7 @@ ul#lang form legend, ul#lang form input, ul#lang form select {
 }	
 
 section#content {
-	width: 1230px;
+	width: 230px;
 	padding: 0;
 	margin: 150px 0 150px 0;
 	float: left;
@@ -1503,7 +1496,7 @@ section.box {
 #quick_links ul li {
 	width: 75px;
 	float: left;
-	margin: 3px 35px 0 35px;
+	margin: 3px 18px 5px 18px;
 }
 
 #quick_links ul li a {
@@ -1513,7 +1506,6 @@ section.box {
 }
 
 #feed ul li {
-	width: 1160px;
 	padding: 0 25px 15px 20px;
 	margin: 0 0 25px -15px;
 	border-bottom: 1px solid #eeeeee;
@@ -1612,18 +1604,37 @@ Ensure your main styling comes before this!
 
 @media only screen and (min-width: 481px) {
 	.wrapper {
-		width: 1280px;
+		width: 400px;
 		margin: 0 auto;
 	}
 	
+	#container {
+		width: 400px;
+		height: 100%;
+		min-height: 100%;
+		margin: 0 auto;
+		padding: 0;
+	}
+	
+	.topbar nav {
+		width: 1080px;
+	}
+	
+	section#content {
+		width: 400px;
+		padding: 0;
+		margin: 150px 0 150px 0;
+		float: left;
+	}
+	
 	.one_full { 
-		width: 1230px; 
+		width: 400px; 
 		margin: 0; 
 		float: left; 
 	}
 
 	.one_half { 
-		width: 590px; 
+		width: 400px; 
 		margin-right: 15px; 
 		float: left; 
 	}
@@ -1644,24 +1655,55 @@ Ensure your main styling comes before this!
 		width: 230px; 
 		margin-right: 15px; 
 		float: left; 
+	}
+	
+	ul#lang {
+		position: absolute;
+		right: 100px;
+		top: 10px;
+	}
+	
+	#quick_links ul li {
+		width: 75px;
+		float: left;
+		margin: 3px 12px 0 12px;
 	}
 	
 }
 
 @media only screen and (min-width: 769px) {	
 	.wrapper {
-		width: 1280px;
+		width: 800px;
 		margin: 0 auto;
 	}
 	
+	#container {
+		width: 800px;
+		height: 100%;
+		min-height: 100%;
+		margin: 0 auto;
+		padding: 0;
+	}
+	
+	.topbar nav {
+		width: 1080px;
+	}
+	
+	section#content {
+		width: 800px;
+		padding: 0;
+		margin: 150px 0 150px 0;
+		float: left;
+	}
+	
 	.one_full { 
-		width: 1230px; 
+		width: 800px; 
 		margin: 0; 
 		float: left; 
 	}
 
 	.one_half { 
-		width: 590px; 
+		width: 375px; 
 		margin-right: 15px; 
 		float: left; 
 	}
@@ -1684,22 +1726,53 @@ Ensure your main styling comes before this!
 		float: left; 
 	}
 	
+	ul#lang {
+		position: absolute;
+		right: 100px;
+		top: 10px;
+	}
+	
+	#quick_links ul li {
+		width: 75px;
+		float: left;
+		margin: 3px 8px 0 8px;
+	}
+
 }
 
 @media only screen and (min-width: 1025px) {
 	.wrapper {
-		width: 1280px;
+		width: 1000px;
 		margin: 0 auto;
 	}
 	
+	#container {
+		width: 1000px;
+		height: 100%;
+		min-height: 100%;
+		margin: 0 auto;
+		padding: 0;
+	}
+	
+	.topbar nav {
+		width: 1080px;
+	}
+	
+	section#content {
+		width: 1000px;
+		padding: 0;
+		margin: 150px 0 150px 0;
+		float: left;
+	}
+	
 	.one_full { 
-		width: 1230px; 
+		width: 1000px; 
 		margin: 0; 
 		float: left; 
 	}
 
 	.one_half { 
-		width: 590px; 
+		width: 475px; 
 		margin-right: 15px; 
 		float: left; 
 	}
@@ -1720,6 +1793,18 @@ Ensure your main styling comes before this!
 		width: 230px; 
 		margin-right: 15px; 
 		float: left; 
+	}
+	
+	ul#lang {
+		position: absolute;
+		right: 100px;
+		top: 10px;
+	}
+	
+	#quick_links ul li {
+		width: 75px;
+		float: left;
+		margin: 3px 21px 0 21px;
 	}
 
 }
@@ -1730,6 +1815,25 @@ Ensure your main styling comes before this!
 		margin: 0 auto;
 	}
 	
+	#container {
+		width: 1280px;
+		height: 100%;
+		min-height: 100%;
+		margin: 0 auto;
+		padding: 0;
+	}
+	
+	.topbar nav {
+		width: 1080px;
+	}
+	
+	section#content {
+		width: 1230px;
+		padding: 0;
+		margin: 150px 0 150px 0;
+		float: left;
+	}
+	
 	.one_full { 
 		width: 1230px; 
 		margin: 0; 
@@ -1737,7 +1841,7 @@ Ensure your main styling comes before this!
 	}
 
 	.one_half { 
-		width: 580px; 
+		width: 590px; 
 		margin-right: 15px; 
 		float: left; 
 	}
@@ -1758,6 +1862,18 @@ Ensure your main styling comes before this!
 		width: 230px; 
 		margin-right: 15px; 
 		float: left; 
+	}
+	
+	ul#lang {
+		position: absolute;
+		right: 330px;
+		top: 10px;
+	}
+	
+	#quick_links ul li {
+		width: 75px;
+		float: left;
+		margin: 3px 35px 0 35px;
 	}
 	
 }
