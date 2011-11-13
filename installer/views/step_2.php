@@ -1,23 +1,16 @@
 <!-- Install PyroCMS - Step two -->
-<section class="title">
-	<h3><?php echo lang('header'); ?></h3>
-</section>
+<h1><?php echo lang('header'); ?></h1>
 
-<section class="item">
-	<p><?php echo lang('intro_text'); ?></p>
-</section>
+<p><?php echo lang('intro_text'); ?></p>
 
 <!-- Recommended -->
-<section class="title">
-	<h3><?php echo lang('mandatory'); ?></h3>
-</section>
+<h2><?php echo lang('mandatory'); ?></h2>
 
-<section class="item">
 <ul class="check">
 
 	<!-- Server -->
 	<li>
-		<h5><?php echo lang('server_settings'); ?></h5>
+		<h4><?php echo lang('server_settings'); ?></h4>
 
 		<p class="result <?php echo ($http_server->supported === TRUE) ? 'pass' : 'partial'; ?>">
 			<?php if ($http_server->supported === TRUE): ?>
@@ -27,12 +20,10 @@
 			<?php endif; ?>
 		</p>
 	</li>
-	
-	<hr>
 
 	<!-- PHP -->
 	<li>
-		<h5><?php echo lang('php_settings'); ?></h5>
+		<h4><?php echo lang('php_settings'); ?></h4>
 		<p><?php echo sprintf(lang('php_required'), $php_min_version); ?></p>
 
 		<p class="result <?php echo ($php_acceptable) ? 'pass' : 'fail'; ?>">
@@ -43,12 +34,10 @@
 		</p>
 
 	</li>
-	
-	<hr>
 
 	<!-- MySQL -->
 	<li>
-		<h5><?php echo lang('mysql_settings'); ?></h5>
+		<h4><?php echo lang('mysql_settings'); ?></h4>
 		<p><?php echo lang('mysql_required'); ?></p>
 
 		<!-- Server -->
@@ -67,19 +56,14 @@
 
 </ul>
 
-</section>
-
 <!-- Recommended -->
-<section class="title">
-	<h3><?php echo lang('recommended'); ?></h3>
-</section>
+<h2><?php echo lang('recommended'); ?></h2>
 
-<section class="item">
 <ul class="check">
 
 	<!-- GD -->
 	<li>
-		<h5><?php echo lang('gd_settings'); ?></h5>
+		<h4><?php echo lang('gd_settings'); ?></h4>
 		<p><?php echo lang('gd_required'); ?></p>
 
 		<p class="result <?php echo ($gd_acceptable) ? 'pass' : 'fail'; ?>">
@@ -89,12 +73,10 @@
 			<?php endif; ?>
 		</p>
 	</li>
-	
-	<hr>
 
 	<!-- Zlib -->
 	<li>
-		<h5><?php echo lang('zlib'); ?></h5>
+		<h4><?php echo lang('zlib'); ?></h4>
 		<p><?php echo lang('zlib_required'); ?></p>
 
 		<p class="result <?php echo ($zlib_enabled) ? 'pass' : 'fail'; ?>">
@@ -105,12 +87,10 @@
 			<?php endif; ?>
 		</p>
 	</li>
-	
-	<hr>
 
 	<!-- Curl -->
 	<li>
-		<h5><?php echo lang('curl'); ?></h5>
+		<h4><?php echo lang('curl'); ?></h4>
 		<p><?php echo lang('curl_required'); ?></p>
 
 		<p class="result <?php echo ($curl_enabled) ? 'pass' : 'fail'; ?>">
@@ -124,21 +104,16 @@
 
 </ul>
 
-</section>
-
 <!-- Summary -->
-<section class="title">
-	<h3><?php echo lang('summary'); ?></h3>
-</section>
+<h2><?php echo lang('summary'); ?></h2>
 
-<section class="item">
 <?php if($step_passed === TRUE): ?>
 
 	<p class="success">
 		<?php echo lang('summary_success'); ?>
 	</p>
 
-	<a class="button" id="next_step" href="<?php echo site_url('installer/step_3'); ?>" title="<?php echo lang('next_step'); ?>"><?php echo lang('step3'); ?></a>
+	<a id="next_step" href="<?php echo site_url('installer/step_3'); ?>" title="<?php echo lang('next_step'); ?>"><?php echo lang('step3'); ?></a>
 
 <?php elseif($step_passed == 'partial'): ?>
 
@@ -146,7 +121,7 @@
 		<?php echo lang('summary_partial'); ?>
 	</p>
 
-	<a class="button" id="next_step" href="<?php echo site_url('installer/step_3'); ?>" title="<?php echo lang('next_step'); ?>"><?php echo lang('step3'); ?></a>
+	<a id="next_step" href="<?php echo site_url('installer/step_3'); ?>" title="<?php echo lang('next_step'); ?>"><?php echo lang('step3'); ?></a>
 
 <?php else: ?>
 
@@ -154,6 +129,5 @@
 		<?php echo lang('summary_failure'); ?>
 	</p>
 
-	<a class="button" id="next_step" href="<?php echo site_url('installer/step_2'); ?>"><?php echo lang('retry'); ?></a>
+	<a id="next_step" href="<?php echo site_url('installer/step_2'); ?>"><?php echo lang('retry'); ?></a>
 <?php endif; ?>
-</section>
