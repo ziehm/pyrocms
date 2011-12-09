@@ -11,14 +11,14 @@ $lang['pages.detail_label']                = 'Details';
 
 // labels
 $lang['pages.page_label']                  = 'Seite';
-$lang['pages.add_page_chunk']						= 'Add Page Chunk'; #translate
-$lang['pages.page_chunk']							= 'Page Chunk'; #translate
+$lang['pages.add_page_chunk']						= 'Page Chunk hinzufügen'; //Don't translate
+$lang['pages.page_chunk']							= 'Page Chunk'; //Don't translate
 $lang['pages.language_label']              = 'Sprache';
 $lang['pages.updated_label']               = 'Aktualisiert';
 $lang['pages.unknown_label']               = 'Unbekannt';
 $lang['pages.title_label']                 = 'Titel';
 $lang['pages.slug_label']                  = 'URL';
-$lang['pages.navigation_label']                  = 'Add to Navigation'; #translate
+$lang['pages.navigation_label']                  = 'Zur Navigation hinzufügen';
 $lang['pages.body_label']                  = 'Inhalt';
 $lang['pages.meta_title_label']            = 'Meta-Titel';
 $lang['pages.meta_keywords_label']         = 'Meta-Schlagwörter';
@@ -29,7 +29,7 @@ $lang['pages.js_label']                    = 'JavaScript';
 $lang['pages.access_label']                = 'Zugang';
 $lang['pages.rss_enabled_label']           = 'RSS aktiviert';
 $lang['pages.comments_enabled_label']      = 'Kommentare aktiviert';
-$lang['pages.is_home_label']      = 'Is default (home) page?'; #translate
+$lang['pages.is_home_label']      = 'Ist dies die Standard (Home-)Seite?'; 
 
 $lang['pages.status_label']                = 'Status';
 $lang['pages.draft_label']                 = 'Entwurf';
@@ -39,7 +39,7 @@ $lang['pages.current_label']               = 'Aktuelle';
 
 $lang['pages.view_label']                  = 'Ansicht';
 $lang['pages.create_label']                = 'Unterobjekt hinzufügen';
-$lang['pages.duplicate_label']			   = 'Duplicate'; #translate
+$lang['pages.duplicate_label']			   = 'Duplizieren'; 
 
 // titles
 $lang['pages.create_title']                = 'Seite erstellen';
@@ -62,8 +62,8 @@ $lang['pages_mass_delete_success']         = '%s Seiten wurden gelöscht.';
 $lang['pages_delete_none_notice']          = 'Keine Seiten wurden gelöscht.';
 $lang['pages_page_already_exist_error']    = 'Es existiert bereits eine Seite mit der URL "%s" in %s.';
 $lang['pages_parent_not_exist_error']      = 'Die ausgewählte übergeordnete Seite existiert nicht.';//there is no german word for 'parent' (in this context at least)
-$lang['pages_chunk_slug_length']					= 'Page Chunk slugs may be no more than 30 characters in length.'; #translate
-$lang['pages_root_folder']                = 'the top level'; #translate
+$lang['pages_chunk_slug_length']					= 'Page Chunk Slugs dürfen nicht mehr als 30 Zeichen lang sein.';
+$lang['pages_root_folder']                = 'Oberste Ebene'; #translate
 
 $lang['pages.tree_explanation']            = 'Die Liste zur Linken repräsentiert Seiten auf deiner Webseite.
 Wähle das "+" Icon neben der Seite um ihre untergeordneten Seiten anzuzeigen. Durch auswählen einer Seite erhältst du Informationen über die ausgewählte Seite.';
